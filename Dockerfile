@@ -11,8 +11,7 @@ RUN apt-get update && \
     supervisor \
     git \
     curl \
-    python \
-    phantomjs
+    python
 
 RUN mkdir -p /var/www
 RUN chown -R www-data:www-data /var/www
