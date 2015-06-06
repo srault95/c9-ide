@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     bzip2 \
+    sudo \
     build-essential \
     rsyslog \
     openssh-server \

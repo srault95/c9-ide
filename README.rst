@@ -1,0 +1,1 @@
+A revoir selon les autres exemples de registry meteor
