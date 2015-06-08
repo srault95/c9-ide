@@ -17,6 +17,7 @@ ENV LOGIN_PASSWORD admin
 
 ENV BIND_IP 127.0.0.1
 ENV PORT 8080
+
 # this allows Meteor to figure out correct IP address of visitors
 END HTTP_FORWARDED_COUNT 1
 #END MAIL_URL smtp://localhost
@@ -51,7 +52,8 @@ RUN apt-get install -y --no-install-recommends \
     g++ apache2-utils sshfs libxml2-dev chrpath libfreetype6 libfreetype6-dev fontconfig libssl-dev libfontconfig1 imagemagick \
     nginx \
     mongodb-org \
-    tcl
+    tcl \
+    tmux
     
 #RUN apt-get install libpam-cracklib -y
 #RUN ln -s /lib/x86_64-linux-gnu/security/pam_cracklib.so /lib/security    
@@ -101,7 +103,7 @@ RUN mkdir -p /workspace /data /root/.ssh /var/run/sshd /var/log/supervisor /var/
     chmod 700 /root/.ssh && \
     rm -f /etc/nginx/sites-enabled/* /etc/nginx/sites-available/* && \
     chown www-data /var/log/nginx && \
-    echo "alias ctl='/usr/local/bin/supervisorctl -c /etc/supervisor/supervisord.conf'" >> /root/.bashrc
+    echo "alias ctl='supervisorctl -c /etc/supervisor/supervisord.conf'" >> /root/.bashrc
     
 ADD nginx.conf /etc/nginx/
 ADD supervisord.conf /etc/supervisor/

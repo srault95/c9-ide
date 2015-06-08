@@ -2,6 +2,8 @@
 
 TARGET=/etc/nginx/certs
 
+mkdir -vp ${TARGET}
+
 if [ -e ${TARGET}/server.key ]; then
     if [ -z "${FORCE_CONFIG}" ]; then
 		echo "Already configured. normal exit"
@@ -31,7 +33,7 @@ if [ -z "${NO_GEN_PASSWORD}" ]; then
 
 		echo "Password generation..."
 
-		printf "${LOGIN_USER:-admin}:$(openssl passwd -crypt ${LOGIN_PASSWORD:-admin})\n" > /etc/nginx/.passwd
+		printf "${LOGIN_USER:-admin}:$(openssl passwd -apr1 ${LOGIN_PASSWORD:-admin})\n" > /etc/nginx/.passwd
 	fi
 
 fi
