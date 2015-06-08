@@ -48,9 +48,10 @@ RUN apt-get install -y --no-install-recommends \
     python-dev \
     python \
     fabric \
-    g++ apache2-utils sshfs libxml2-dev chrpath libfreetype6 libfreetype6-dev libssl-dev libfontconfig1 imagemagick \
+    g++ apache2-utils sshfs libxml2-dev chrpath libfreetype6 libfreetype6-dev fontconfig libssl-dev libfontconfig1 imagemagick \
     nginx \
-    mongodb-org
+    mongodb-org \
+    tcl
     
 #RUN apt-get install libpam-cracklib -y
 #RUN ln -s /lib/x86_64-linux-gnu/security/pam_cracklib.so /lib/security    
