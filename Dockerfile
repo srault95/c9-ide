@@ -1,6 +1,13 @@
-FROM node:latest
+#FROM node:latest
+#FROM node:slim
+FROM ubuntu:trusty
 
 ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:chris-lea/node.js && \
+    apt-get update
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -11,13 +18,15 @@ RUN apt-get update && \
     openssh-server \
     supervisor \
     git \
+    ca-certificates \
     curl \
-    python
+    python \
+    nodejs
 
 RUN mkdir -p /var/www
 RUN chown -R www-data:www-data /var/www
 
-#RUN npm install -g fibers
+RUN npm install --silent -g forever phantomjs fibers
 
 RUN echo "PS1='(container)\u@\h:\w\$ '" >> /root/.bashrc
 
@@ -37,6 +46,10 @@ RUN curl https://install.meteor.com/ |sh
 
 ADD start.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh
+
+VOLUME /home/persist/git/repos
+VOLUME /projects
+WORKDIR /projects
 
 CMD ["/usr/local/bin/start.sh"]
 
