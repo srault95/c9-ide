@@ -3,11 +3,11 @@
 FROM ubuntu:trusty
 
 ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get update && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:chris-lea/node.js && \
-    apt-get update
+ENV BIND_IP 0.0.0.0
+ENV PORT 8099
+ENV NODE_VERSION 0.12.4
+ENV NPM_VERSION 2.11.0
+#ENV DISABLE_WEBSOCKETS 1
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -21,12 +21,18 @@ RUN apt-get update && \
     ca-certificates \
     curl \
     python \
-    nodejs
+    chrpath libfreetype6 libfreetype6-dev libssl-dev libfontconfig1 imagemagick
+    
+RUN curl -SLO http://nodejs.org/dist/latest/node-v$NODE_VERSION-linux-x64.tar.gz && \
+    tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
+    rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
+    npm install -g npm@"$NPM_VERSION" && \
+    npm cache clear
 
-RUN mkdir -p /var/www
-RUN chown -R www-data:www-data /var/www
+#RUN mkdir -p /var/www
+#RUN chown -R www-data:www-data /var/www
 
-RUN npm install --silent -g forever phantomjs fibers
+RUN npm install -g forever phantomjs fibers bower grunt-cli gulp iron-meteor
 
 RUN echo "PS1='(container)\u@\h:\w\$ '" >> /root/.bashrc
 
@@ -50,6 +56,8 @@ RUN chmod +x /usr/local/bin/start.sh
 VOLUME /home/persist/git/repos
 VOLUME /projects
 WORKDIR /projects
+
+EXPOSE 8099
 
 CMD ["/usr/local/bin/start.sh"]
 
