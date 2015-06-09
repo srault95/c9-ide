@@ -140,6 +140,7 @@ RUN git clone https://github.com/c9/core.git /c9 && \
 RUN curl https://install.meteor.com/ |sh
 
 ADD gen-ssl.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/gen-ssl.sh
 
 ADD start.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh
