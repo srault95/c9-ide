@@ -16,7 +16,7 @@ Fonctionnalités
 - Serveur MongoDB 2.6.10 - http://mongodb.org/
 - Serveur SSH avec authentification par clé privé (bind docker sur port 2223)
 - Serveur REDIS 3.0.2 
-- Serveur Nginx comme proxy avec certificat SSL auto-généré (port 443 pour l'ide et port 444 pour les projets meteor) 
+- Serveur Nginx comme proxy avec certificat SSL auto-généré (port 443 pour l'ide et port 444 pour les projets meteor)
 
 Installation
 ------------
@@ -76,4 +76,25 @@ Création et lancement d'un projet meteor dans l'IDE
 
 - Login/password par défault: admin/admin
  
- 
+Outils Intégrés
+---------------
+
+- Phantomjs
+- node-gyp
+- fibers
+- yo
+- forever
+- bower
+- coffee
+- grunt-cli
+- gulp
+- less
+- saas
+- typescript
+- stylus
+- iron-meteor
+- demeteorizer
+- node-inspector
+     
+- Python Setuptools
+- Pip installer 

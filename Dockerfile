@@ -145,7 +145,6 @@ RUN chmod +x /usr/local/bin/gen-ssl.sh
 ADD start.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh
 
-VOLUME /home/persist/git/repos
 VOLUME /etc/nginx/virtual
 VOLUME /workspace
 
