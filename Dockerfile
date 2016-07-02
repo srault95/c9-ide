@@ -1,5 +1,7 @@
 FROM srault95/baseimage-docker:xenial
 
+MAINTAINER STEPHANE RAULT <stephane.rault@radicalspam.org>
+
 ENV DISABLE_SSH 1
 
 ENV SSL_COMMON_NAME localhost
@@ -32,44 +34,24 @@ RUN curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGO_VERSIO
     && mv mongodb-linux-x86_64-${MONGO_VERSION}/bin/* /usr/local/bin \
     && rm -rf mongodb-linux-x86_64-${MONGO_VERSION}*
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     bzip2 \
     sudo \
     build-essential \
+    g++ apache2-utils sshfs libxml2-dev chrpath libfreetype6 libfreetype6-dev fontconfig libssl-dev libfontconfig1 imagemagick \
     language-pack-en \
     language-pack-fr \    
     git ca-certificates curl wget \
-    python3-dev python3-setuptools \
     supervisor \
+    python3-dev python3-setuptools \
     nginx \
 	redis-server \
     phantomjs \
-    g++ curl libssl-dev apache2-utils git libxml2-dev sshfs
-#	nodejs npm \
+    net-tools
 
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
 	&& apt-get install -y nodejs
-
-#g++ apache2-utils sshfs libxml2-dev chrpath libfreetype6 libfreetype6-dev fontconfig libssl-dev libfontconfig1 imagemagick \
-#    tcl \
-#    tmux \
-    
-#RUN apt-get install libpam-cracklib -y
-#RUN ln -s /lib/x86_64-linux-gnu/security/pam_cracklib.so /lib/security    
-
-# node.js 0.12
-#RUN curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash - && \
-#    apt-get install -y --no-install-recommends nodejs && \
-#   npm set strict-ssl false && \
-#    npm install -g npm && \
-#    npm cache clear
-
-# node.js 0.12 - binary
-#RUN curl -SLO http://nodejs.org/dist/latest/node-v$NODE_VERSION-linux-x64.tar.gz && \
-#    tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 && \
-#    rm "node-v$NODE_VERSION-linux-x64.tar.gz" && \
-#    npm install -g npm@"$NPM_VERSION" && \
-#    npm cache clear
 
 ENV LANG en_US.UTF-8
 
@@ -79,7 +61,8 @@ RUN locale-gen en_US && \
   locale-gen fr_FR.UTF-8 && \
   dpkg-reconfigure locales
   
-RUN curl -k https://bootstrap.pypa.io/get-pip.py | python3 -
+RUN curl -k https://bootstrap.pypa.io/get-pip.py | python3 - \
+	&& curl -k https://bootstrap.pypa.io/get-pip.py | python2 -
 
 RUN echo "PS1='(docker)\u@\h:\w\$ '" >> /root/.bashrc
 
@@ -104,17 +87,20 @@ RUN scripts/install-sdk.sh \
 
 RUN curl https://install.meteor.com/ | sh
 
-#ADD gen-ssl.sh /usr/local/bin/
-#RUN chmod +x /usr/local/bin/gen-ssl.sh
-#ADD start.sh /usr/local/bin/
-#RUN chmod +x /usr/local/bin/start.sh
-
 VOLUME /etc/nginx/virtual
 VOLUME /workspace
 
 WORKDIR /workspace
 
+#cloud9 via nginx proxy (ssl)
 EXPOSE 443
+#meteor app via nginx proxy (ssl)
+EXPOSE 8080
+
+#cloud9 direct
+EXPOSE 8081
+#meteor app direct
+EXPOSE 3000
 
 RUN apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/lib/cache /var/lib/log \
