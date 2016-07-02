@@ -1,4 +1,4 @@
-FROM srault95/baseimage-docker
+FROM srault95/baseimage-docker:xenial
 
 ENV DISABLE_SSH 1
 
@@ -43,9 +43,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     supervisor \
     nginx \
 	redis-server \
-	nodejs \
     phantomjs \
     g++ curl libssl-dev apache2-utils git libxml2-dev sshfs
+#	nodejs npm \
+
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+	&& apt-get install -y nodejs
 
 #g++ apache2-utils sshfs libxml2-dev chrpath libfreetype6 libfreetype6-dev fontconfig libssl-dev libfontconfig1 imagemagick \
 #    tcl \
