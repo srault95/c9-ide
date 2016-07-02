@@ -1,22 +1,27 @@
 Meteor.js - Cloud9 IDE - Docker
 ===============================
 
-Environnement de développement Cloud9/MeteorJS
+Environnement de développement Meteor.js
 
-Peut aussi servir aux développements python, nodejs.
+Peut aussi servir aux développements Python et Nodejs.
+
+.. contents:: **Table des matières**
+    :depth: 1
+    :backlinks: none
 
 Fonctionnalités
 ---------------
 
-- Image Docker / Ubuntu trusty (14.04) + mise à jour distribution
-- Cloud9 master (au 09/06/2015) - https://c9.io/
-- Meteor 1.1.0.2 - https://www.meteor.com/
-- Node.js 0.12.4
-- NPM 2.11.1
-- Serveur MongoDB 2.6.10 - http://mongodb.org/
-- Serveur SSH avec authentification par clé privé (bind docker sur port 2223)
-- Serveur REDIS 3.0.2 
-- Serveur Nginx comme proxy avec certificat SSL auto-généré (port 443 pour l'ide et port 444 pour les projets meteor)
+- Image Docker / Ubuntu xenian (16.04)
+- Cloud9 3.1.2813 (master - commit 8fe2d24) - https://c9.io/
+- Meteor 1.3.4.1 - https://www.meteor.com/
+- Node.js v6.2.2
+- Npm 3.9.5
+- Python 2.7.11
+- Python 3.5.1
+- Serveur MongoDB 3.2.7 - http://mongodb.org/
+- Serveur REDIS 3.0.6 
+- Serveur Nginx comme proxy avec certificat SSL auto-généré (port 443 pour l'ide et port 8080 pour les projets meteor)
 
 Installation
 ------------
@@ -27,25 +32,17 @@ Installation
 
 ::
 
-    $ git clone https://github.com/srault95/docker-meteor.git
-    
-    $ cd docker-meteor
-    
-    $ docker build -t cloud9
-    
-    # Facultatif mais permet de rendre vos données permanentes
-    $ mkdir -vp /home/cloud9/workspace /home/cloud9/data
-    
     $ docker run -d --name meteor \
        -v /home/cloud9/workspace:/workspace \
        -v /home/cloud9/data:/data \
-       -v ~/.ssh/authorized_keys2:/root/.ssh/authorized_keys \
-       -p 2223:22 \
-       -p MYPUBLIC_IP:443:443 -p MYPUBLIC_IP:444:444 \
+       -p MYPUBLIC_IP:443:443 -p MYPUBLIC_IP:8080:8080 \
        -e SSL_COMMON_NAME="MYPUBLIC_IP" \
        -e LOGIN_USER="admin" \
        -e LOGIN_PASSWORD="admin" \
-       cloud9
+       srault95/docker-meteor
+       
+   # -v /home/cloud9/workspace et /home/cloud9/data ne sont pas obligatoires
+   # mais permettent de sauvegarder votre travail à l'extérieur de docker. 
 
 Utilisation de cloud9
 ---------------------
@@ -64,37 +61,68 @@ Création et lancement d'un projet meteor dans l'IDE
 
 ::
 
-    $ cd /workspace
-    
-    $ meteor create myproject
-    
-    $ cd myproject    
+   $ cd /workspace
+   
+   $ git clone https://github.com/meteor/simple-todos 
+   
+   $ cd simple-todos   
+   
+   $ meteor npm install
+   
+   $ meteor update
+   
+   $ meteor -p $PORT
+   
+   # Ouvrez le projet meteor à l'adresse https://MYPUBLIC_IP:8080
+   # Login/password par défault: admin/admin
 
-    ROOT_URL=https://MYPUBLIC_IP:444 MONGO_URL=mongodb://localhost/myproject meteor -p $IP:$PORT
+Pour utiliser le serveur mongodb
+--------------------------------
+
+::
+
+   $ ctl start mongodb
+   
+   $ ROOT_URL=https://MYPUBLIC_IP:8080 MONGO_URL=mongodb://localhost/myproject meteor -p $PORT
  
-- Ouvrez le projet meteor à l'adresse https://MYPUBLIC_IP:444
-
-- Login/password par défault: admin/admin
+   # Ouvrez le projet meteor à l'adresse https://MYPUBLIC_IP:8080
+   # Login/password par défault: admin/admin
  
-Outils Intégrés
----------------
 
-- Phantomjs
-- node-gyp
-- fibers
-- yo
-- forever
-- bower
-- coffee
-- grunt-cli
-- gulp
-- less
-- saas
-- typescript
-- stylus
-- iron-meteor
-- demeteorizer
-- node-inspector
-     
-- Python Setuptools
-- Pip installer 
+Accès en mode commande
+----------------------
+
+Vous pouvez soit utiliser une fenêtre de terminal dans l'IDE, soit utiliser docker:
+
+::
+
+   $ docker exec -it meteor bash
+
+ 
+Pour utiliser le serveur Redis
+------------------------------
+
+::
+
+   $ ctl start redis
+ 
+Changer le login / mot de passe http ou ajouter un utilisateur
+--------------------------------------------------------------
+
+Commandes à entrer dans une fenêtre de terminal à l'intérieur du docker.
+
+::
+
+   $ printf "myuser:$(openssl passwd -apr1 mypassword)\n" > /etc/nginx/.passwd
+   OU
+   $ htpasswd -c /etc/nginx/.passwd myuser
+ 
+ 
+TODO
+----
+
+- Certificat SSL letsencrypt - https://letsencrypt.org/
+- DOC: Utilisation d'un serveur MongoDB externe
+- DOC: ssh
+- Mise à jour 
+ 
