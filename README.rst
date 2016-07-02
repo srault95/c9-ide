@@ -39,7 +39,7 @@ Installation
        -e SSL_COMMON_NAME="MYPUBLIC_IP" \
        -e LOGIN_USER="admin" \
        -e LOGIN_PASSWORD="admin" \
-       srault95/docker-meteor
+       srault95/c9-ide
        
    # -v /home/cloud9/workspace et /home/cloud9/data ne sont pas obligatoires
    # mais permettent de sauvegarder votre travail à l'extérieur de docker. 
