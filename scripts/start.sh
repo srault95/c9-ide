@@ -1,6 +1,8 @@
 #!/bin/bash
 
-/usr/local/bin/gen-ssl.sh || exit 1
+set -e
+
+/scripts/gen-ssl.sh || exit 1
 
 mkdir -vp /data/db
 
