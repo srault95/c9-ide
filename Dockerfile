@@ -21,8 +21,6 @@ ENV TERM screen
 ENV HTTP_FORWARDED_COUNT "1"
 #END MAIL_URL smtp://localhost
 
-ENV MONGO_VERSION ubuntu1604-3.4.5
-
 ENV PATH /root/.c9/bin:/root/.c9/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN rm -f /etc/cron.daily/logrotate
@@ -43,12 +41,6 @@ RUN apt-get update \
 	redis-server \
     phantomjs \
     net-tools
-
-#MongoDB
-RUN curl -O https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-${MONGO_VERSION}.tgz \
-    && tar -xzf mongodb-linux-x86_64-${MONGO_VERSION}.tgz \
-    && mv mongodb-linux-x86_64-${MONGO_VERSION}/bin/* /usr/local/bin \
-    && rm -rf mongodb-linux-x86_64-${MONGO_VERSION}*
 
 # NGrok
 RUN curl -L -o /tmp/ngrok-stable-linux-amd64.zip https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip \
