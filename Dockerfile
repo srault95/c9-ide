@@ -38,7 +38,6 @@ RUN apt-get update \
     supervisor \
     python3-dev python3-setuptools \
     nginx \
-	redis-server \
     phantomjs \
     net-tools
 
